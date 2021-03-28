@@ -3,9 +3,19 @@
 \usepackage{amsmath}
 \usepackage{cite}
 \usepackage{courier}
+\usepackage{setspace}
+\usepackage{fancyhdr}
 
 
 \begin{document}
 
 \include{Title/title}
+\pagenumbering{roman}
+
+\renewcommand*\contentsname{\centering Table of Contents}
+\tableofcontents
+\newpage
+
+\pagenumbering{arabic}
+\include{Chapter1/chapter1}
 \end{document}
