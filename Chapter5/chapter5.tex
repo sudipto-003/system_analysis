@@ -45,7 +45,7 @@ Among different scheduling techniques, \textbf{Network Diagrams} uses to graphic
 As the proposed new system for the AKASH DTH is decomposed in a well structured WBS with each tasks number, description, duration and dependencies. This document works as the map for the project workflows and goals and further used in the CPM, PERT and Gantt Chart techniques. \newline
 Time duration of each task is estimated using the top-down approach. The historic data gathered from their previous system's management was a key resource for the estimation and also expert judgment was asked from the previous team before planning the WBS. The dependencies were listed with additional care as the breakdown of the complex project scheduling highly affects from the internal dependencies among the component tasks. WBS was reviewed and the estimations were adjusted by Akash DTH team members.
 
-\begin{table}[h!]
+\begin{table}[H]
 \begin{center}
 	\begin{tabular}{| p{1cm}|p{7cm}|p{2cm}|p{3cm} |}
 		\hline
@@ -65,7 +65,7 @@ Time duration of each task is estimated using the top-down approach. The histori
 		\hline
 		G & Coding new custom package creation and alteration scheme & 15 days & C \\
 		\hline
-		H & Integrating UI with back-end API endpoints & 28 days & J \\
+		H & Integrating UI with back-end API endpoints & 28 days & B,  J \\
 		\hline
 		I & Migrating new database models to production database system & 14 days & D \\
 		\hline
@@ -104,4 +104,144 @@ On activities on node or AON network, nodes are either presented with a circle o
 	\label{fig:aon}
 \end{figure} 
 
+\section{Critical Path}
+Critical path in a project is sequence of the tasks that directly effects in the project completion deadlines. That means any delay in a task of the critical path will eventually create a delay in the final project completion. So critical path detects the minimum time needed to complete the project. Each project must have at least one critical path but more than one critical path is also common in project management. Accelerate the tasks on the critical path does not guarantee to shorten the project duration as the critical path can be shifted to a new path. Tasks that are not part of the critical path have a little impact on the project completion time. Some key concepts associated with critical path are listed below:
+ 
+ \paragraph{Early Start Time(ES)} 
+ This is earliest possible time a start can be started. A task early start time will always after the preceding task's early finish time. When a task have multiple preceding tasks, the maximum of their early finish time is used as the task's early start time.
+ \paragraph{Early Finish Time(ET)}
+ This is earliest possible time a task can be finished. Early finish time is simply the early start time plus the estimated duration of the task.
+ \paragraph{Late Start Time(LT)}
+ This is last minute a task can be started without affecting the project schedule. Late start time is simply the late finish time minus the duration of the task.
+ \paragraph{Late Finish Time(LF)}
+ This is the last minute a task can be completed within the project schedule. A task's late finish is the late start time of succeeding task's late start time, if the task has multiple successor then minimum of their late start is used as the late finish of the current task.  
+ \paragraph{Slack}
+ This defines how long a task can be delayed without affecting the project schedule and finish deadline. All tasks in the critical path will have a zero slack and other tasks that are not in the critical path will have a positive slack.
+ 
+ All these information are vital in critical path determination and project scheduling. So in the network diagram we used a rectangular node representation including the tasks number, duration, early start, early finish, late start, late finish and slack of the task as the following structure.
+ 
+ \begin{center}
+\begin{tabular}{|c|c|c|}
+	\hline
+	ES & Duration & EF \\
+	\hline
+	\multicolumn{3}{|c|}{Project ID} \\
+	\hline
+	LS & Slack & LF \\
+	\hline
+\end{tabular}
+\end{center}
+
+\subsection{Critical Path Method(CPM)}
+Critical path method is the algorithm to detect the critical path in the project schedule. It uses the slack of the tasks to detect the critical path. CPM is a two phase algorithm, a forward pass and followed by a backward pass.
+
+\subsubsection{Forward Pass} 
+In the forward pass, we calculate the early start(ES) and early finish(EF) of each task. In forward pass, we started the calculation from the left most task or the starting task(the task has no dependency) and proceed to the right until the final task reached. The first step in the forward pass is to create the network diagram using the WBS listed in table \ref{chart:WBS}. ES of an activity is equal to the EF of it's predecessor or the maximum of the EF(s) if it has multiple predecessors. ES of the first or leftmost task is always zero. The formula used to calculate EF is, $EF = ES + duration.$
+
+\subsubsection{Backward Pass}
+In backward pass, we calculate the late start(LS) and late finish(LF)  of each task. We started from the last or final task of the schedule and moved to preceding task, in a backward direction. The LF is determined first, then LS is calculated from LF and duration. The LF of a task is equal to the LS of the succeeding task or the minimum of the LS if multiple succeeding  tasks are there in the project schedule. The LF of the final task is equal to the EF of that task previously determined in the forward pass phase. The formula used to calculate LS is, $LS = LF - duration.$
+
+\subsubsection{Slack and Critical Path Identification}
+After the backward pass, all the information ES, EF, LS, LF of each task has been determined. The next step is the slack calculation. Slack identifies the tasks belong to the critical path. The formula used tor slack calculation is,$ slack =  LS - ES = LF - EF $. When slack is calculated, critical path is identified with tasks slack equals to zero. 
+
+Network diagram for WBS of our proposed system modifications listed in Table \ref{chart:WBS} including each tasks ES, EF, LS, LF and slack. From the following network diagram, we can identify the critical path in this project schedule as: \newline
+\[ A \to C \to D \to I \to J \to H \to K \to L \]
+
+The critical path in the network diagram is shown in highlighted  color on the below diagram.
+
+\subsubsection{Summury Of CPM}  
+
+
+\subsection{PERT}
+Program evaluation and review technique or PERT is a network diagram to represent the project's timeline. PERT method uses three estimations to calculate the expected time of each task. PERT is more effective when the duration of activities are uncertain. A brief description of each of three estimations used in PERT is given below:
+\begin{itemize}
+	\item \textbf{Optimistic Time, $a$} The minimum amount of time at least required to complete a task. This represent the best case scenario time.
+	\item \textbf{Pessimistic Time, $b$} The maximum of time time a task can be taken to complete. The represent the worst case scenario time.
+	\item \textbf{Most Likely Time, $m$} The best estimate of how long a task can take to complete assuming there is no delay or scarcity of resources.
+\end{itemize} 
+
+After finalize these three estimations, the expected time $te_{i}$ is calculated using the following formula of weighted average: \newline
+\begin{equation}
+te_{i} = \frac{a_i + 4m_i + b_i}{6} 
+\end{equation}
+
+Then the standard deviation $SD_{i}$ of each task is calculated. Standard deviation or SD signifies the variance of expected time of the tasks, smaller standard deviation means the value to be more close to the mean and the estimation is more confident. The formula used to calculate standard deviation is \newline
+
+\begin{equation}
+SD_{i} = \frac{b_{i} - a_{i}}{6} 
+\end{equation}
+
+In PERT method, expected time and standard deviation for each task is calculated individually and then the critical path is identified and finally the standard deviation for the whole project is calculated using every task present in the critical path. The formula used to calculate the standard deviation of the critical path is \newline
+
+\begin{equation}
+SD_{cp} = \sqrt{s_{1}^2 + s_{2}^2 + s_{3}^2 + \dots + s_n^2} 
+\end{equation}
+
+\subsubsection{PERT Activity List}
+PERT activity list is tabular method that shows the activities their three estimations, expected time and standard deviation in a table format. We used the activities or tasks previously decomposed in WBS(Table \ref{chart:WBS}) and make the optimistic, pessimistic and most likely estimations of each task and then calculated their expected time and standard deviation. Estimations were make using top-down method and using historic data and expert evaluation. The PERT list is presented in the table \ref{chart:PERT}. 
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{| p{1cm} | p{2cm}| p{2cm} | p{2cm} | p{2cm} |p{2cm} | p{3cm} |}
+			\hline
+			Task ID  & Optimistic Time, $a_i$ &   Most Likely Time, $m_i$ & Pessimistic Time, $b_i$ & Expected Time, $te_i$ & Standard Deviation, $SD_i$ & Dependencies \\
+			\hline
+			A  & 12 & 14 & 16 & 14 & 0.67 & None \\
+			\hline
+			B  & 19 & 21 & 23 & 21  & 0.67 & A \\
+			\hline
+			C  & 18 & 21 & 24 & 21 & 1.0 & A \\
+			\hline
+			D  & 12 & 15  & 17 & 15 & 0.83 & C \\
+			\hline
+			E & 12 & 15 & 18 & 15 & 1.0 & C \\
+			\hline
+			F  & 13 & 15 & 18 & 15 & 0.83 & C \\
+			\hline
+			G  & 14 & 15 & 20 & 16 & 1.0  & C \\
+			\hline
+			H &  24 & 28 & 31 & 28 & 1.17 & B,  J \\
+			\hline
+			I  & 13 & 14 & 15 & 14 & 0.33 &  D \\
+			\hline
+			J  & 18 & 21 & 27 & 22 & 1.5  & I, E, F, G \\
+			\hline
+			K  & 12  & 14 & 15 & 14 & 0.5  & H \\
+			\hline
+			L  & 18 & 21 & 23 & 21 & 0.83 & K \\
+			\hline    
+		\end{tabular}
+	\end{center}
+	\caption{PERT activity list for proposed system of Akash DTH }
+	\label{chart:PERT}
+\end{table}
+
+From the PERT activities list, tasks have standard deviation within the range 0 to +1.5 which signifies that the expected time is well estimated. Majority of the tasks standard deviation are in range 0 to +1.0, only one task has standard deviation over 1.0, which evens provide proof of the lower variance of our estimations. 
+
+\subsubsection{PERT Chart}
+PERT chart network diagram with AOA or Activities On Arrow representation. In PERT chart the nodes represent the project milestones and arrow represents the activity associated with their expected duration. PERT uses the critical path we previously identified with CPM method $ A \to C \to D \to I \to J \to H \to K \to L $ in the network diagram. PERT chart for ours proposed system for AKASH DTH with the critical path highlighted is shown in figure \ref{fig:pert}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{PERT}
+	\caption{PERT Chart for Akash DTH's project schedule}
+	\label{fig:pert}
+\end{figure} 
+ 
+\subsubsection{Project Standard Deviation}
+Standard deviation of the overall project basically signifies the variance of the whole project schedule estimations. To calculate the standard deviation of our proposed system for Akash DTH, we used the critical path identified previously in CPM method. Critical path in our project schedule is: 
+\[ A \to C \to D \to I \to J \to H \to K \to L \]
+So standard deviation of our project schedule,
+\begin{equation*} 
+	\begin{split}
+		SD_{cp} &= \sqrt{SD_A^2 + SD_C^2 + SD_D^2 + SD_I^2 + SD_J^2  + SD_H^2 + SD_K^2 + SD_L^2 } \\
+		&= \sqrt{0.67^2 + 1.0^2 + 0.83^2 + 0.33^2 + 1.5^2 + 1.17^2 + 0.5^2 + 0.83^2 } \\
+		& = \sqrt{7.4934} \\
+		& = 2.7374
+	\end{split}
+\end{equation*} 
+So the overall variance in our project schedule increases because of some high deviation was introduced in some tasks in the critical path. So the estimations of the tasks included in the critical path affects the overall project estimation.
+
+\subsubsection{Summury of PERT}
+  
 \end{spacing}
