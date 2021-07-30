@@ -104,7 +104,8 @@ On activities on node or AON network, nodes are either presented with a circle o
 	\label{fig:aon}
 \end{figure} 
 
-\section{Critical Path}
+\subsection{Critical Path Method(CPM)}
+\subsubsection{Critical Path}
 Critical path in a project is sequence of the tasks that directly effects in the project completion deadlines. That means any delay in a task of the critical path will eventually create a delay in the final project completion. So critical path detects the minimum time needed to complete the project. Each project must have at least one critical path but more than one critical path is also common in project management. Accelerate the tasks on the critical path does not guarantee to shorten the project duration as the critical path can be shifted to a new path. Tasks that are not part of the critical path have a little impact on the project completion time. Some key concepts associated with critical path are listed below:
  
  \paragraph{Early Start Time(ES)} 
@@ -132,7 +133,8 @@ Critical path in a project is sequence of the tasks that directly effects in the
 \end{tabular}
 \end{center}
 
-\subsection{Critical Path Method(CPM)}
+
+\subsubsection{Creating CPM Network Diagram}
 Critical path method is the algorithm to detect the critical path in the project schedule. It uses the slack of the tasks to detect the critical path. CPM is a two phase algorithm, a forward pass and followed by a backward pass.
 
 \subsubsection{Forward Pass} 
@@ -144,13 +146,21 @@ In backward pass, we calculate the late start(LS) and late finish(LF)  of each t
 \subsubsection{Slack and Critical Path Identification}
 After the backward pass, all the information ES, EF, LS, LF of each task has been determined. The next step is the slack calculation. Slack identifies the tasks belong to the critical path. The formula used tor slack calculation is,$ slack =  LS - ES = LF - EF $. When slack is calculated, critical path is identified with tasks slack equals to zero. 
 
-Network diagram for WBS of our proposed system modifications listed in Table \ref{chart:WBS} including each tasks ES, EF, LS, LF and slack. From the following network diagram, we can identify the critical path in this project schedule as: \newline
+The CPM network diagram for our project schedule is shown in Figure \ref{fig:cpm}. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\textwidth]{CPM}
+	\caption{CPM network diagram}
+	\label{fig:cpm}
+\end{figure}
+
+From the above network diagram, we can identify the critical path in our project schedule where the tasks in path have a slack equals to zero. Critical path of schedule for Akash DTH's improvement project : \newline
 \[ A \to C \to D \to I \to J \to H \to K \to L \]
 
-The critical path in the network diagram is shown in highlighted  color on the below diagram.
-
-\subsubsection{Summury Of CPM}  
-
+\subsubsection{Summary Of CPM}  
+CPM is a great tool for project scheduling. With CPM diagram, we can reveal and show the dependencies among the tasks in our schedule. Every task is associated with the slack time, so we can determine which tasks can be delayed and we are able to make changes on our project management, like reallocating team members and resources. With CPM technique our project schedule become more realistic.
+Some disadvantages to use CPM in our project schedule were, the complexity of CPM. Our proposed system project is more complex as their are several dependencies on some tasks and as a result the network diagram grows larger. Maintaining a large network diagram is more difficult. CPM lacks the way to keep track of the progress of the tasks in execution period. 
 
 \subsection{PERT}
 Program evaluation and review technique or PERT is a network diagram to represent the project's timeline. PERT method uses three estimations to calculate the expected time of each task. PERT is more effective when the duration of activities are uncertain. A brief description of each of three estimations used in PERT is given below:
@@ -171,16 +181,25 @@ Then the standard deviation $SD_{i}$ of each task is calculated. Standard deviat
 SD_{i} = \frac{b_{i} - a_{i}}{6} 
 \end{equation}
 
-In PERT method, expected time and standard deviation for each task is calculated individually and then the critical path is identified and finally the standard deviation for the whole project is calculated using every task present in the critical path. The formula used to calculate the standard deviation of the critical path is \newline
+In PERT method, expected time and standard deviation for each task is calculated individually and then the critical path is identified and finally the expected time and standard deviation for the whole project is calculated using every task present in the critical path.
+Expected time of the project, assuming their are n number of tasks in the critical path of the schedule: \newline
+
+\begin{equation} \label{eq:3}
+ te_{cd} = \sum_{i=1}^{n}te_i
+\end{equation}
+
+ And the standard deviation of the project will be  \newline
 
 \begin{equation}
-SD_{cp} = \sqrt{s_{1}^2 + s_{2}^2 + s_{3}^2 + \dots + s_n^2} 
+SD_{cp} = \sqrt{\sum_{i=1}^{n} SD_i^2} 
 \end{equation}
 
 \subsubsection{PERT Activity List}
 PERT activity list is tabular method that shows the activities their three estimations, expected time and standard deviation in a table format. We used the activities or tasks previously decomposed in WBS(Table \ref{chart:WBS}) and make the optimistic, pessimistic and most likely estimations of each task and then calculated their expected time and standard deviation. Estimations were make using top-down method and using historic data and expert evaluation. The PERT list is presented in the table \ref{chart:PERT}. 
 
-\begin{table}[H]
+From the PERT activities list, tasks have standard deviation within the range 0 to +1.5 which signifies that the expected time is well estimated. Majority of the tasks standard deviation are in range 0 to +1.0, only one task has standard deviation over 1.0, which evens provide proof of the lower variance of our estimations. 
+
+\begin{table}[h!]
 	\begin{center}
 		\begin{tabular}{| p{1cm} | p{2cm}| p{2cm} | p{2cm} | p{2cm} |p{2cm} | p{3cm} |}
 			\hline
@@ -216,10 +235,8 @@ PERT activity list is tabular method that shows the activities their three estim
 	\label{chart:PERT}
 \end{table}
 
-From the PERT activities list, tasks have standard deviation within the range 0 to +1.5 which signifies that the expected time is well estimated. Majority of the tasks standard deviation are in range 0 to +1.0, only one task has standard deviation over 1.0, which evens provide proof of the lower variance of our estimations. 
-
 \subsubsection{PERT Chart}
-PERT chart network diagram with AOA or Activities On Arrow representation. In PERT chart the nodes represent the project milestones and arrow represents the activity associated with their expected duration. PERT uses the critical path we previously identified with CPM method $ A \to C \to D \to I \to J \to H \to K \to L $ in the network diagram. PERT chart for ours proposed system for AKASH DTH with the critical path highlighted is shown in figure \ref{fig:pert}.
+PERT chart network diagram with AOA or Activities On Arrow representation. In PERT chart the nodes represent the project milestones and arrow represents the activity to be completed to reach the guided milestones.  Activity expected duration is also represented in the arrow. PERT uses the critical path we previously identified with CPM method $ A \to C \to D \to I \to J \to H \to K \to L $ in the network diagram. PERT chart for ours proposed system for AKASH DTH with the critical path highlighted is shown in figure \ref{fig:pert}.
 
 \begin{figure}[H]
 	\centering
@@ -228,9 +245,18 @@ PERT chart network diagram with AOA or Activities On Arrow representation. In PE
 	\label{fig:pert}
 \end{figure} 
  
-\subsubsection{Project Standard Deviation}
-Standard deviation of the overall project basically signifies the variance of the whole project schedule estimations. To calculate the standard deviation of our proposed system for Akash DTH, we used the critical path identified previously in CPM method. Critical path in our project schedule is: 
-\[ A \to C \to D \to I \to J \to H \to K \to L \]
+\subsubsection{PERT Analysis For Overall Project}
+The expected duration of the overall project is the sum of the expected time of each task on schedule critical path. So expected time to complete our proposed work for Akash DTH is \newline
+
+\begin{equation*}
+	\begin{split}
+		te_{cp} &= te_A + te_C + te_D + te_I + te_J + te_H + te_K + te_L \\
+		&= 14 + 21 + 15 + 14 + 22 + 28 + 14 + 21 \\
+		& = 149  days
+	\end{split}
+\end{equation*}
+
+Standard deviation of the overall project basically signifies the variance of the whole project schedule estimations. To calculate the standard deviation of our proposed system for Akash DTH, we used the critical path identified previously in CPM method. 
 So standard deviation of our project schedule,
 \begin{equation*} 
 	\begin{split}
@@ -240,8 +266,123 @@ So standard deviation of our project schedule,
 		& = 2.7374
 	\end{split}
 \end{equation*} 
+
 So the overall variance in our project schedule increases because of some high deviation was introduced in some tasks in the critical path. So the estimations of the tasks included in the critical path affects the overall project estimation.
 
-\subsubsection{Summury of PERT}
+\subsubsection{Summary of PERT}
+PERT is another great technique to schedule a project timeline. Main advantage of PERT for our project schedule was the uncertainty of our time estimation. As we are not well experienced in project management, our estimations are not enough realistic. PERT uses three estimations for a task and then expected time of a task is determined based on those estimations. Thus the variance of our estimations was able to be reduced and the result becomes more realistic. 
+Main disadvantage of PERT in our project schedule was the labor it takes to make the estimations. Bad estimations increase the risk of higher variance in the resultant outcome. Making three estimations for each tasks of the project is thus an time and labor extensive process. It also requires recursive review and updates throughout the project management process.
+
+\section{Bar Chart}
+Bar charts are graphical viewing technique of task scheduled over time. Bar charts enable the team member to view start and end time, progress of the task in the comparison with current date. Gantt chart is the most used bar chart technique in project scheduling. We represent our proposed system development project schedule using a gantt chart. 
+\subsection{Gantt Chart}
+ Gantt chart is a bar chart which shows the tasks in temporal sequence with each task's duration and progress on the chart. Gantt chart also allows to represent the temporal dependencies among tasks even the task's allowed slack time. Some important analogy in gantt chart representation is briefly described below.
+ \textbf{Precedence}\newline
+ One task must be done before another task. Task A have precedence over task B or task A is predecessor of task B in figure \ref{fig:pecedence}
+ \begin{figure}[h]
+ 	\centering
+ 	\includegraphics[width=0.4\textwidth]{Precedence}
+ 	\caption{Precedence in gantt chart}
+ 	\label{fig:pecedence}
+ \end{figure} 
+
+\textbf{Concurrent}\newline
+Concurrent tasks are those tasks in the schedule that can occur concurrently. Concurrent tasks can be completely or partially overlapped. Both complete and partial concurrency of tasks shown in figure \ref{fig:conc}. 
+\begin{figure*}[h]
+	\centering
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[height=1.5in]{c_ol}
+		\caption{Complete Overlapped}
+	\end{subfigure}
+	\begin{subfigure}{0.4\textwidth}
+		\centering
+		\includegraphics[height=1.5in]{p_ol}
+		\caption{Partially Overlapped}
+	\end{subfigure}
+	\caption{Concurrent tasks in gantt chart}
+	\label{fig:conc}
+\end{figure*}
+     
+\subsubsection{Dependencies in Gantt Chart}
+\textbf{Finish-to-Start, FS} A f-to-s B or A FS B means Task B can't start before task A finishes. Finish to start dependency in gantt chart is shown in figure \ref{fig:FS}.
+ \begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{FS}
+	\caption{Finish-to-Start dependency}
+	\label{fig:FS}
+\end{figure} 
+\textbf{Start-to-Start, SS} A s-to-s B or A SS B means Task B can't start until task A starts. Start to start dependency in gantt chart is shown in figure \ref{fig:SS}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{SS}
+	\caption{Start-to-Start dependency}
+	\label{fig:SS}
+\end{figure} 
+\textbf{Finish-to-Finish, FF} A f-to-f B or A FF B means Task B can't finish before task A finishes. Finish to finish dependency in gantt chart is shown in figure \ref{fig:FF}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{FF}
+	\caption{Finish-to-Finish dependency}
+	\label{fig:FF}
+\end{figure} 
+\textbf{Start-to-Finish, SF} A s-to-f B or A SF B means Task B can't finish before task A starts. Start to finish dependency in gantt chart is shown in figure \ref{fig:SF}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{FS}
+	\caption{Finish-to-Start dependency}
+	\label{fig:SF}
+\end{figure} 
+
+\textbf{Lag Time}\newline
+Lag time means delay between sequenced tasks in the planned schedule. In gantt chart it is possible to shows lag time between tasks. Lag time in gantt chart is represented in figure \ref{fig:lag}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{lag}
+	\caption{Lag time in gantt chart}
+	\label{fig:lag}
+\end{figure} 
+
+\textbf{Lead Time}\newline
+Lead time means advance between sequenced tasks in the planned schedule. In gantt chart it is also easy to shows lead time between tasks when a task starts before its schedule time. Lead time in gantt chart is represented in figure \ref{fig:lead}.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.4\textwidth]{lead}
+	\caption{Lead time in gantt chart}
+	\label{fig:lead}
+\end{figure} 
+
+\subsubsection{Slack}
+Slack is a important measurement in project schedule. Slack of a task means the amount of time that task can be delayed with out causing any delay in the project compilation time. It is common for a task to have some slack when there are multiple concurrent task in project schedule. 
+Free slack of a task is the amount of time the task can be delayed with out causing any further delay in any subsequent task. In figure \ref{fig:fslack}, free slack of Task B is where both task A and B have start-t0-finish dependency with task C and task A takes lnger time than task B that causing a free slack time for task B.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.6\textwidth]{fslack}
+	\caption{Free slack in gantt chart}
+	\label{fig:fslack}
+\end{figure} 
+
+Thus a gantt chart works as a great visual representation of project schedule for both team members and even non technical stake holders. We create a gantt chart for the project of Akash DTH system improvement using some software. The gantt chart is shown in figure \ref{fig:gantt}.
+
+\paragraph{Summary of Gantt Chart}
+
+
+
+\section{Schedule Optimization}
+Project schedule is created in the planning phase of the project management and highly based on estimations. So several techniques are used in project schedule to optimize the planned schedule and shorten the project timeline. Among different optimization techniques some common techniques are,
+\begin{itemize}
+	\item Re-organize Schedule
+	\item Reduce Project Scope
+	\item Increase Cost
+\end{itemize}
+In our project for Akash DTH both re-organize and reduce scope techniques are not feasible. So we considered and proposed the increase cost technique to optimize our planned schedule if it becomes necessary to shorten the project completion time. 
+
+\subsection{Increase Cost}
+Cost increase a schedule optimization technique in which uses a trade off between cost and time. In case of we need to shorten our project duration cost technique can provide a better solution than any other optimization techniques. In cost increase we don't allow to reduce our project scope, reducing scope will also cause removal of the features we proposed to improve Akash DTH service. There ae two common ways to optimize schedule by creasing cost,
+\paragraph{Crashing} We can allocate more resources to tasks. Like the team size can be increased in longer duration tasks to complete the task faster. Some tasks in our schedule critical path have a large expected duration, so this tasks will be possible to complete in a shorter time is more people engaged in the task and work in a team. Increase member in the development team will increase the cost of the project but completion time can reduced by a large factor by appointing experienced and confident team members.
+\paragraph{Breaking Dependencies} Second method in cost increase schedule optimization is breaking the task dependency and allowing more concurrent tasks in the schedule. In our proposed schedule many tasks have multiple dependencies that make schedule more sequential and lengthen the project duration. By breaking the dependencies in those tasks will result in more concurrent tasks, though breaking dependencies will increase the risk of the project management and some dependencies must have to be maintained for a task to be completed successfully. Breaking dependencies will allow more concurrent tasks, and more concurrent  tasks will need more resources but shorten the overall duration. This this technique also trade off between cost and time to optimize the project schedule.
+
+\section{Conclusion}  
+Project schedule is a vital tool in project's time and resource management. Scheduling process starts in the early phase of project management and is maintained in the full duration of project completion. We planned the schedule by first creating the work breakdown structure chart, identifying the tasks and then estimating task duration. We created both CPM and PERT network diagram for this project schedule. Through CPM we can identified the critical path of the project. PERT was great tool for this project schedule because of the uncertainty we have in our estimated time duration. And then the Gantt chart of the schedule was developed which shows the duration and keeps the progress in real time. We accounted the risk of possible delay in the schedule as plans are not always perfect and considered cost increase method to optimize our planned schedule. Project schedule is not a one time job, it is an iterative process, so the planned schedule needs regular revision and further improvements in throughout the execution phase of project management.
   
 \end{spacing}
